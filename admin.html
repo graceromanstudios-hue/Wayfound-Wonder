@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wayfound & Wonder — Product & Music Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF6EC; --bg2:#F1E7CE; --ink:#2E2A22; --ink-soft:#6B6152;
+    --accent:#C9962B; --accent-ink:#2E2A22; --card:#FFFFFF;
+    --line: rgba(46,42,34,0.14); --danger:#B23A5C;
+    --font-display:'Fraunces', serif; --font-body:'Manrope', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body); padding-bottom:80px;}
+  h1,h2,h3{font-family:var(--font-display); font-weight:600; margin:0;}
+  p{color:var(--ink-soft); line-height:1.5; margin:0;}
+  .wrap{max-width:980px; margin:0 auto; padding:0 24px;}
+  header{padding:28px 0 18px; border-bottom:1px solid var(--line); background:var(--card);}
+  header h1{font-size:1.5rem; margin-bottom:6px;}
+  header p{font-size:0.9rem; max-width:60ch;}
+  .top-actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .btn{ border:none; border-radius:999px; padding:11px 20px; font-weight:700; font-size:0.85rem;
+    cursor:pointer; font-family:var(--font-body); display:inline-flex; align-items:center; gap:8px;}
+  .btn-primary{background:var(--accent); color:var(--accent-ink);}
+  .btn-ghost{background:transparent; border:1.5px solid var(--line); color:var(--ink);}
+  .btn-danger{background:transparent; border:1.5px solid var(--danger); color:var(--danger);}
+  .btn-small{padding:7px 14px; font-size:0.78rem;}
+  input[type=file]{display:none;}
+
+  .realm-tabs{display:flex; gap:8px; padding:18px 0; flex-wrap:wrap;}
+  .realm-tab{ border:1.5px solid var(--line); background:var(--card); border-radius:999px;
+    padding:9px 18px; font-weight:700; font-size:0.85rem; cursor:pointer; color:var(--ink-soft);}
+  .realm-tab.active{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+
+  section.block{padding:22px 0;}
+  .block-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+  .block-head h2{font-size:1.15rem;}
+
+  .music-row{ background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .music-row .fname{font-size:0.85rem; color:var(--ink-soft);}
+
+  .product-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px;}
+  .product-card{background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; padding-bottom:14px;}
+  .drop-zone{ aspect-ratio:4/5; background:var(--bg2); display:flex; align-items:center; justify-content:center;
+    text-align:center; font-size:0.8rem; color:var(--ink-soft); cursor:pointer; position:relative; overflow:hidden;}
+  .drop-zone img{width:100%; height:100%; object-fit:cover; position:absolute; inset:0;}
+  .drop-zone.drag{outline:2px dashed var(--accent); outline-offset:-6px;}
+  .product-fields{padding:12px 14px 0;}
+  .product-fields input, .product-fields textarea{
+    width:100%; border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px;
+    font-family:var(--font-body); font-size:0.85rem; background:var(--bg); color:var(--ink);}
+  .product-fields textarea{min-height:52px; resize:vertical;}
+  .product-fields label{font-size:0.72rem; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:3px;}
+  .remove-row{padding:0 14px; text-align:right;}
+
+  .add-card{ border:1.5px dashed var(--line); border-radius:14px; display:flex; align-items:center;
+    justify-content:center; min-height:180px; cursor:pointer; color:var(--ink-soft); font-weight:700; font-size:0.9rem;}
+  .add-card:hover{border-color:var(--accent); color:var(--accent);}
+
+  .toast{ position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg);
+    padding:12px 22px; border-radius:999px; font-size:0.85rem; font-weight:600; opacity:0; transition:opacity .3s ease; pointer-events:none;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Product &amp; Music Manager</h1>
+    <p>Drop in photos, fill in the details, and pick a track for each realm — no code required. When you're done, click Export and upload the downloaded <strong>site-data.json</strong> to the same folder as your <strong>index.html</strong> on your web host (replacing the old copy). Your work also autosaves to this browser as you go.</p>
+    <div class="top-actions">
+      <button class="btn btn-primary" id="exportBtn">⬇ Export site-data.json</button>
+      <button class="btn btn-ghost" id="importBtn">⬆ Load existing site-data.json</button>
+      <input type="file" id="importFile" accept="application/json">
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="realm-tabs" id="realmTabs"></div>
+
+  <section class="block">
+    <div class="block-head"><h2>Realm music</h2><p style="font-size:0.8rem;">One track per realm — plays when a visitor picks that realm.</p></div>
+    <div class="music-row" id="musicRow">
+      <div>
+        <div><strong id="musicRealmLabel">—</strong></div>
+        <div class="fname" id="musicFilename">No track uploaded</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost btn-small" id="musicUploadBtn">Upload track</button>
+        <button class="btn btn-danger btn-small" id="musicRemoveBtn">Remove</button>
+      </div>
+      <input type="file" id="musicFile" accept="audio/*">
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>Portraits</h2></div>
+    <div class="product-grid" id="grid-portraits"></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>Shoes</h2></div>
+    <div class="product-grid" id="grid-shoes"></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>Nails</h2></div>
+    <div class="product-grid" id="grid-nails"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const REALMS = ['light','dark','cosmic','verdant','ember'];
+  const REALM_LABELS = {light:'Aurelume (Light)', dark:'Noctivale (Dark)', cosmic:'Astrivane (Cosmic)', verdant:'Sylvaris (Verdant)', ember:'Cinderfall (Ember)'};
+  const CATEGORIES = ['portraits','shoes','nails'];
+  const STORAGE_KEY = 'wfw_admin_data_v1';
+
+  function emptyData(){
+    const d = {portraits:{}, shoes:{}, nails:{}, music:{}};
+    REALMS.forEach(r=>{ d.portraits[r]=[]; d.shoes[r]=[]; d.nails[r]=[]; d.music[r]=''; });
+    return d;
+  }
+
+  let data = emptyData();
+  let currentRealm = 'light';
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw) data = JSON.parse(raw);
+    }catch(e){}
+  }
+  function save(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){
+      toast('Could not autosave locally (storage full) — export soon to be safe.');
+    }
+  }
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(()=> t.classList.remove('show'), 2200);
+  }
+  function fileToDataURL(file){
+    return new Promise((resolve, reject)=>{
+      const r = new FileReader();
+      r.onload = ()=> resolve(r.result);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  /* ---------- realm tabs ---------- */
+  const tabsEl = document.getElementById('realmTabs');
+  REALMS.forEach(r=>{
+    const b = document.createElement('button');
+    b.className = 'realm-tab' + (r===currentRealm ? ' active':'');
+    b.textContent = REALM_LABELS[r];
+    b.dataset.realm = r;
+    b.addEventListener('click', ()=>{ currentRealm = r; renderAll(); });
+    tabsEl.appendChild(b);
+  });
+
+  /* ---------- music ---------- */
+  const musicFileInput = document.getElementById('musicFile');
+  document.getElementById('musicUploadBtn').addEventListener('click', ()=> musicFileInput.click());
+  musicFileInput.addEventListener('change', async e=>{
+    const file = e.target.files[0]; if(!file) return;
+    data.music[currentRealm] = await fileToDataURL(file);
+    save(); renderMusic();
+    toast('Track added for ' + REALM_LABELS[currentRealm]);
+  });
+  document.getElementById('musicRemoveBtn').addEventListener('click', ()=>{
+    data.music[currentRealm] = ''; save(); renderMusic();
+  });
+  function renderMusic(){
+    document.getElementById('musicRealmLabel').textContent = REALM_LABELS[currentRealm];
+    document.getElementById('musicFilename').textContent = data.music[currentRealm] ? 'Track uploaded ✓' : 'No track uploaded';
+  }
+
+  /* ---------- products ---------- */
+  function newProduct(){ return {title:'', price:'', size:'', description:'', image:''}; }
+
+  function renderGrid(category){
+    const grid = document.getElementById('grid-'+category);
+    grid.innerHTML = '';
+    const items = data[category][currentRealm];
+
+    items.forEach((item, idx)=>{
+      const card = document.createElement('div'); card.className = 'product-card';
+      card.innerHTML = `
+        <div class="drop-zone" data-idx="${idx}" data-cat="${category}">
+          ${item.image ? `<img src="${item.image}" alt="">` : 'Click or drop an image'}
+        </div>
+        <div class="product-fields">
+          <label>Title</label><input type="text" data-field="title" value="${escapeAttr(item.title)}" placeholder="e.g. The Radiant Vow">
+          <label>Price</label><input type="text" data-field="price" value="${escapeAttr(item.price)}" placeholder="e.g. From $180">
+          <label>Size / variant</label><input type="text" data-field="size" value="${escapeAttr(item.size)}" placeholder="e.g. 11x14 print">
+          <label>Description</label><textarea data-field="description" placeholder="Short description...">${escapeHtml(item.description)}</textarea>
+        </div>
+        <div class="remove-row"><button class="btn btn-danger btn-small" data-remove="${idx}">Remove</button></div>`;
+      grid.appendChild(card);
+
+      const dz = card.querySelector('.drop-zone');
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.style.display = 'none';
+      card.appendChild(fileInput);
+      dz.addEventListener('click', ()=> fileInput.click());
+      fileInput.addEventListener('change', async e=>{
+        const file = e.target.files[0]; if(!file) return;
+        items[idx].image = await fileToDataURL(file);
+        save(); renderGrid(category);
+      });
+      ['dragover','dragleave','drop'].forEach(evt=>{
+        dz.addEventListener(evt, e=>{
+          e.preventDefault();
+          if(evt==='dragover') dz.classList.add('drag');
+          if(evt==='dragleave') dz.classList.remove('drag');
+          if(evt==='drop'){
+            dz.classList.remove('drag');
+            const file = e.dataTransfer.files[0];
+            if(file && file.type.startsWith('image/')){
+              fileToDataURL(file).then(url=>{ items[idx].image = url; save(); renderGrid(category); });
+            }
+          }
+        });
+      });
+
+      card.querySelectorAll('.product-fields [data-field]').forEach(inp=>{
+        inp.addEventListener('input', ()=>{
+          items[idx][inp.dataset.field] = inp.value;
+          save();
+        });
+      });
+      card.querySelector('[data-remove]').addEventListener('click', ()=>{
+        items.splice(idx,1); save(); renderGrid(category);
+      });
+    });
+
+    const addCard = document.createElement('div'); addCard.className = 'add-card';
+    addCard.textContent = '+ Add product';
+    addCard.addEventListener('click', ()=>{ items.push(newProduct()); save(); renderGrid(category); });
+    grid.appendChild(addCard);
+  }
+
+  function escapeHtml(s){ return (s||'').replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function escapeAttr(s){ return escapeHtml(s).replace(/"/g,'&quot;'); }
+
+  function renderAll(){
+    document.querySelectorAll('.realm-tab').forEach(t=> t.classList.toggle('active', t.dataset.realm===currentRealm));
+    renderMusic();
+    CATEGORIES.forEach(renderGrid);
+  }
+
+  /* ---------- export / import ---------- */
+  document.getElementById('exportBtn').addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'site-data.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    toast('Exported! Upload site-data.json to your hosting.');
+  });
+
+  const importBtn = document.getElementById('importBtn');
+  const importFile = document.getElementById('importFile');
+  importBtn.addEventListener('click', ()=> importFile.click());
+  importFile.addEventListener('change', e=>{
+    const file = e.target.files[0]; if(!file) return;
+    const r = new FileReader();
+    r.onload = ()=>{
+      try{
+        const parsed = JSON.parse(r.result);
+        data = Object.assign(emptyData(), parsed);
+        REALMS.forEach(realm=>{
+          CATEGORIES.forEach(cat=>{ if(!data[cat][realm]) data[cat][realm] = []; });
+          if(data.music[realm] === undefined) data.music[realm] = '';
+        });
+        save(); renderAll();
+        toast('Loaded site-data.json');
+      }catch(err){ toast('That file could not be read as valid site data.'); }
+    };
+    r.readAsText(file);
+  });
+
+  /* ---------- init ---------- */
+  load();
+  renderAll();
+})();
+</script>
+</body>
+</html>

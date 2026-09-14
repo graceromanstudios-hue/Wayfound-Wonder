@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Wayfound &amp; Wonder — Custom Fantasy Portraits, Shoes &amp; Nails</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    color-scheme: light;
+    --font-display:'Fraunces', serif;
+    --font-body:'Manrope', sans-serif;
+    --radius-s:6px;
+    --radius-m:14px;
+    --maxw:1180px;
+  }
+
+  [data-realm="light"]{
+    --bg:#FBF6EC; --bg2:#F1E7CE; --ink:#2E2A22; --ink-soft:#6B6152;
+    --accent:#C9962B; --accent-ink:#2E2A22; --accent2:#8FAFC2; --card:#FFFFFF;
+    --line: rgba(46,42,34,0.12); --shadow: 0 18px 40px rgba(140,110,40,0.14);
+  }
+  [data-realm="dark"]{
+    --bg:#150F1B; --bg2:#1F1727; --ink:#EFE7F2; --ink-soft:#B3A3BE;
+    --accent:#B23A5C; --accent-ink:#EFE7F2; --accent2:#8471A0; --card:#221A2D;
+    --line: rgba(239,231,242,0.10); --shadow: 0 18px 40px rgba(0,0,0,0.5);
+  }
+  [data-realm="cosmic"]{
+    --bg:#0A0A22; --bg2:#120E33; --ink:#E9E7FB; --ink-soft:#9C97C9;
+    --accent:#7B5CFA; --accent-ink:#0A0A22; --accent2:#3FD9C7; --card:#161240;
+    --line: rgba(233,231,251,0.10); --shadow: 0 18px 45px rgba(30,15,90,0.55);
+  }
+  [data-realm="verdant"]{
+    --bg:#101B12; --bg2:#16261A; --ink:#E8F0E4; --ink-soft:#9DB89C;
+    --accent:#4C9A5B; --accent-ink:#0C140D; --accent2:#2FBF9F; --card:#182B1B;
+    --line: rgba(232,240,228,0.10); --shadow: 0 18px 40px rgba(0,20,8,0.5);
+  }
+  [data-realm="ember"]{
+    --bg:#1B0E09; --bg2:#2A140C; --ink:#F5E6DC; --ink-soft:#C99B85;
+    --accent:#E2612B; --accent-ink:#1B0E09; --accent2:#F2B705; --card:#25130B;
+    --line: rgba(245,230,220,0.10); --shadow: 0 18px 40px rgba(40,10,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body);
+    transition:background .5s ease, color .5s ease; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  h1,h2,h3,.display{ font-family:var(--font-display); font-weight:600; letter-spacing:-0.01em; margin:0; }
+  p{line-height:1.6; color:var(--ink-soft); margin:0;}
+  a{color:inherit;}
+  button{font-family:var(--font-body); cursor:pointer;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  img,svg{display:block;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  header{ position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .headbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px;
+    max-width:var(--maxw); margin:0 auto; gap:16px; flex-wrap:wrap; }
+  .brand{ font-family:var(--font-display); font-size:1.35rem; font-weight:600; display:flex; align-items:center; gap:10px; }
+  .brand-mark{width:24px; height:24px; flex:none;}
+  nav.mainnav{display:flex; gap:20px; align-items:center; flex-wrap:wrap;}
+  nav.mainnav a{ text-decoration:none; font-size:0.92rem; color:var(--ink-soft); font-weight:600; transition:color .25s ease; }
+  nav.mainnav a:hover{color:var(--ink);}
+
+  .realm-toggle{display:flex; gap:4px; background:var(--bg2); padding:4px; border-radius:999px; border:1px solid var(--line); flex-wrap:wrap;}
+  .realm-btn{ border:none; background:transparent; padding:7px 12px; border-radius:999px;
+    font-size:0.76rem; font-weight:700; color:var(--ink-soft); transition:all .3s ease; white-space:nowrap; }
+  .realm-btn.active{background:var(--accent); color:var(--accent-ink);}
+  .quiz-relaunch{ border:1px solid var(--line); background:transparent; color:var(--ink);
+    padding:8px 14px; border-radius:999px; font-size:0.8rem; font-weight:700; white-space:nowrap; }
+
+  @media (max-width:980px){ nav.mainnav{display:none;} }
+
+  .hero{ position:relative; padding:80px 0 60px; overflow:hidden; }
+  .hero-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:50px; align-items:center; }
+  @media (max-width:880px){ .hero-grid{grid-template-columns:1fr;} }
+  .hero-eyebrow{font-size:0.95rem; color:var(--accent); font-weight:700; margin-bottom:14px; display:block;}
+  .hero h1{font-size:clamp(2.2rem, 5vw, 3.5rem); line-height:1.05; margin-bottom:22px;}
+  .hero p.lead{font-size:1.08rem; max-width:46ch; margin-bottom:28px;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:14px 24px; border-radius:999px;
+    font-weight:700; font-size:0.95rem; border:none; transition:transform .25s ease, box-shadow .25s ease; }
+  .btn-primary{background:var(--accent); color:var(--accent-ink); box-shadow:var(--shadow);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{background:transparent; border:1.5px solid var(--line); color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--accent);}
+  .hero-art{position:relative; width:100%; aspect-ratio:1/1;}
+  .hero-art svg{width:100%; height:100%; position:absolute; inset:0; display:none;}
+
+  @keyframes drift{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+  @keyframes twinkle{ 0%,100%{opacity:.3;} 50%{opacity:1;} }
+  .float{animation:drift 6s ease-in-out infinite;}
+  .star{animation:twinkle 3s ease-in-out infinite;}
+
+  section.block{padding:74px 0;}
+  .section-head{max-width:640px; margin-bottom:40px;}
+  .section-head h2{font-size:clamp(1.6rem,3vw,2.2rem); margin-bottom:14px;}
+  .tag{ display:inline-block; font-size:0.76rem; font-weight:700; color:var(--accent);
+    background:color-mix(in srgb, var(--accent) 14%, transparent); padding:5px 12px; border-radius:999px; margin-bottom:16px; }
+
+  .gallery, .preview-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  @media (max-width:900px){ .gallery, .preview-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:600px){ .gallery, .preview-grid{grid-template-columns:1fr;} }
+
+  .portrait-card, .preview-card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius-m);
+    overflow:hidden; transition:transform .3s ease, box-shadow .3s ease; position:relative; }
+  .portrait-card:hover, .preview-card:hover{transform:translateY(-4px); box-shadow:var(--shadow);}
+  .portrait-frame, .preview-art{aspect-ratio:4/5; width:100%;}
+  .portrait-frame svg, .preview-art svg{width:100%; height:100%;}
+  .portrait-info, .preview-info{padding:18px 20px 22px;}
+  .portrait-info h3, .preview-info h3{font-size:1.02rem; margin-bottom:6px;}
+  .portrait-info .price{font-size:0.85rem; color:var(--accent); font-weight:700; margin-top:8px; display:block;}
+
+  .ribbon{ position:absolute; top:16px; right:-42px; width:170px; text-align:center; background:var(--accent);
+    color:var(--accent-ink); font-size:0.66rem; font-weight:800; padding:5px 0; transform:rotate(40deg); letter-spacing:0.03em; }
+
+  .cta-banner{ margin-top:46px; border-radius:var(--radius-m); padding:40px;
+    background:var(--bg2); border:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center; gap:26px; flex-wrap:wrap; }
+  .cta-banner h3{font-size:1.3rem; margin-bottom:10px;}
+  .cta-banner p{max-width:44ch;}
+
+  .realm-strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:20px;}
+  .realm-card{ border-radius:var(--radius-m); padding:26px; border:1px solid var(--line);
+    cursor:pointer; transition:transform .3s ease, border-color .3s ease; }
+  .realm-card:hover{transform:translateY(-3px);}
+  .realm-card.current{border-color:var(--accent);}
+  .realm-card h3{font-size:1.1rem; margin-bottom:8px;}
+  .realm-card p{font-size:0.88rem;}
+  .realm-swatch{display:flex; gap:6px; margin-bottom:14px;}
+  .swatch-dot{width:15px; height:15px; border-radius:50%;}
+
+  .steps-list{display:flex; flex-direction:column; gap:16px; margin:26px 0 6px;}
+  .step-item{display:flex; gap:14px; align-items:flex-start;}
+  .step-num{width:30px; height:30px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    font-weight:800; font-size:0.85rem; display:flex; align-items:center; justify-content:center; flex:none;}
+  .step-item strong{color:var(--ink); display:block; margin-bottom:2px;}
+
+  .notify-row{display:flex; gap:8px; margin-top:6px;}
+  .notify-row input{ flex:1; padding:10px 12px; border-radius:8px; border:1px solid var(--line);
+    background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:0.85rem; }
+  .notify-row button{ padding:10px 16px; border-radius:8px; border:none; background:var(--accent);
+    color:var(--accent-ink); font-weight:700; font-size:0.82rem; }
+  .notify-confirm{font-size:0.85rem; color:var(--accent); font-weight:700; display:none;}
+
+  .package-teaser{ border-radius:var(--radius-m); border:1px solid var(--line); padding:40px;
+    background:linear-gradient(135deg, var(--bg2), var(--card)); display:grid;
+    grid-template-columns:1fr 1fr; gap:32px; align-items:center; margin-bottom:40px; }
+  @media (max-width:800px){ .package-teaser{grid-template-columns:1fr;} }
+  .package-list{list-style:none; margin:16px 0 0; padding:0; display:flex; flex-direction:column; gap:10px;}
+  .package-list li{display:flex; align-items:center; gap:10px; font-size:0.9rem; color:var(--ink-soft);}
+  .package-list li::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--accent); flex:none;}
+
+  footer{border-top:1px solid var(--line); padding:46px 0 32px;}
+  .foot-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:22px;}
+  footer .brand{margin-bottom:10px;}
+  footer p{max-width:38ch; font-size:0.86rem;}
+  .foot-links{display:flex; gap:18px; font-size:0.84rem; color:var(--ink-soft); flex-wrap:wrap;}
+
+  .quiz-overlay{ position:fixed; inset:0; z-index:100; background:var(--bg);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    transition:opacity .4s ease, visibility .4s ease; }
+  .quiz-overlay.hidden{opacity:0; visibility:hidden; pointer-events:none;}
+  .quiz-card{ width:100%; max-width:700px; background:var(--card); border:1px solid var(--line);
+    border-radius:20px; padding:44px; box-shadow:var(--shadow); position:relative; max-height:88vh; overflow-y:auto; }
+  @media (max-width:560px){ .quiz-card{padding:28px 20px;} }
+  .quiz-progress{display:flex; gap:6px; margin-bottom:26px;}
+  .quiz-progress span{height:4px; flex:1; border-radius:4px; background:var(--line);}
+  .quiz-progress span.done{background:var(--accent);}
+  .quiz-step{display:none;}
+  .quiz-step.active{display:block; animation:fadein .4s ease;}
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  .quiz-step h2{font-size:1.4rem; margin-bottom:8px;}
+  .quiz-step .quiz-sub{margin-bottom:24px;}
+  .quiz-options{display:grid; grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); gap:12px;}
+  .quiz-opt{ border:1.5px solid var(--line); background:var(--bg); border-radius:14px; padding:16px 10px;
+    display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center;
+    transition:border-color .25s ease, transform .25s ease; }
+  .quiz-opt:hover{transform:translateY(-3px); border-color:var(--accent);}
+  .quiz-opt svg{width:36px; height:36px;}
+  .quiz-opt span{font-size:0.8rem; font-weight:700;}
+  .quiz-swatch-opt{width:100%; height:44px; border-radius:10px; margin-bottom:2px;}
+
+  .quiz-skip{ margin-top:26px; text-align:center; font-size:0.85rem; color:var(--ink-soft);
+    text-decoration:underline; background:none; border:none; }
+  .quiz-result{text-align:center;}
+  .quiz-result .result-badge{ width:76px; height:76px; border-radius:50%; margin:0 auto 18px; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; }
+  .quiz-result h2{margin-bottom:10px;}
+  .quiz-result p{max-width:44ch; margin:0 auto 24px;}
+
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:90;
+    display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-backdrop.open{display:flex;}
+  .modal-card{ width:100%; max-width:560px; max-height:88vh; overflow-y:auto; background:var(--card);
+    border:1px solid var(--line); border-radius:18px; padding:36px; box-shadow:var(--shadow); }
+  @media (max-width:560px){ .modal-card{padding:24px 18px;} }
+  .modal-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px;}
+  .modal-close{background:none; border:none; color:var(--ink-soft); font-size:1.4rem; line-height:1;}
+  .field-group{margin-bottom:20px;}
+  .field-label{font-size:0.84rem; font-weight:700; margin-bottom:10px; display:block;}
+  .swatch-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .swatch-pick{ width:36px; height:36px; border-radius:50%; border:2px solid transparent; cursor:pointer;
+    transition:transform .2s ease, border-color .2s ease; }
+  .swatch-pick.selected{border-color:var(--ink); transform:scale(1.1);}
+  .pill-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .pill{ padding:8px 15px; border-radius:999px; border:1.5px solid var(--line); background:var(--bg);
+    font-size:0.83rem; font-weight:600; color:var(--ink); }
+  .pill.selected{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+  textarea.field-input{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--line);
+    background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:0.9rem; min-height:86px; resize:vertical; }
+  .modal-submit{width:100%; justify-content:center; margin-top:6px;}
+  .modal-confirm{display:none; text-align:center; padding:16px 0;}
+  .modal-confirm .result-badge{ width:60px; height:60px; border-radius:50%; margin:0 auto 16px; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; }
+  .form-note{font-size:0.75rem; color:var(--ink-soft); margin-top:10px;}
+
+</style>
+</head>
+<body data-realm="light">
+
+  <div class="quiz-overlay" id="quizOverlay">
+    <div class="quiz-card">
+      <div class="quiz-progress" id="quizProgress"></div>
+
+      <div class="quiz-step active" data-step="1">
+        <h2>What calls you into the story?</h2>
+        <p class="quiz-sub">Pick the opening that feels most like yours.</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-realm="light"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="10" fill="#C9962B"/><g stroke="#C9962B" stroke-width="2"><line x1="24" y1="4" x2="24" y2="12"/><line x1="24" y1="36" x2="24" y2="44"/><line x1="4" y1="24" x2="12" y2="24"/><line x1="36" y1="24" x2="44" y2="24"/></g></svg><span>A sunlit meadow</span></button>
+          <button class="quiz-opt" data-realm="dark"><svg viewBox="0 0 48 48"><path d="M30 6a18 18 0 1 0 12 30 14 14 0 0 1-12-30z" fill="#B23A5C"/></svg><span>A moonlit ruin</span></button>
+          <button class="quiz-opt" data-realm="cosmic"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" fill="#7B5CFA"/><circle cx="14" cy="14" r="2" fill="#3FD9C7"/><circle cx="38" cy="12" r="1.6" fill="#3FD9C7"/><circle cx="40" cy="34" r="2" fill="#3FD9C7"/></svg><span>A drifting nebula</span></button>
+          <button class="quiz-opt" data-realm="verdant"><svg viewBox="0 0 48 48"><path d="M24 6c10 4 16 12 16 22a16 16 0 0 1-32 0c0-10 6-18 16-22z" fill="#4C9A5B"/><line x1="24" y1="20" x2="24" y2="42" stroke="#0C140D" stroke-width="2"/></svg><span>A hidden grove</span></button>
+          <button class="quiz-opt" data-realm="ember"><svg viewBox="0 0 48 48"><path d="M24 4c14 14 16 20 16 28a16 16 0 0 1-32 0c0-8 2-14 16-28z" fill="#E2612B"/><circle cx="24" cy="32" r="6" fill="#F2B705"/></svg><span>A volcano's edge</span></button>
+        </div>
+      </div>
+
+      <div class="quiz-step" data-step="2">
+        <h2>Choose your companion</h2>
+        <p class="quiz-sub">Every traveler walks beside something.</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-realm="light"><svg viewBox="0 0 48 48"><path d="M24 8c4 6 12 8 12 16 0 8-6 14-12 16-6-2-12-8-12-16 0-8 8-10 12-16z" fill="#C9962B"/></svg><span>A phoenix</span></button>
+          <button class="quiz-opt" data-realm="dark"><svg viewBox="0 0 48 48"><path d="M24 10 34 22l-6 2 8 12-12-6-12 6 8-12-6-2z" fill="#B23A5C"/></svg><span>A raven</span></button>
+          <button class="quiz-opt" data-realm="cosmic"><svg viewBox="0 0 48 48"><path d="M8 30c6-14 20-20 32-16-8 2-16 8-18 18-6 2-10 0-14-2z" fill="#3FD9C7"/></svg><span>A comet-wyrm</span></button>
+          <button class="quiz-opt" data-realm="verdant"><svg viewBox="0 0 48 48"><path d="M10 34c4-14 12-22 14-22s10 8 14 22c-6-4-10-6-14-6s-8 2-14 6z" fill="#4C9A5B"/></svg><span>A moss-wolf</span></button>
+          <button class="quiz-opt" data-realm="ember"><svg viewBox="0 0 48 48"><path d="M8 26c8-4 14-14 16-18 2 4 8 14 16 18-8 0-12 4-16 10-4-6-8-10-16-10z" fill="#E2612B"/></svg><span>A cinder-hawk</span></button>
+        </div>
+      </div>
+
+      <div class="quiz-step" data-step="3">
+        <h2>Pick a relic to carry</h2>
+        <p class="quiz-sub">This tells us more than you'd think.</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-realm="light"><svg viewBox="0 0 48 48"><ellipse cx="24" cy="20" rx="12" ry="14" stroke="#C9962B" stroke-width="2.5" fill="none"/><line x1="24" y1="34" x2="24" y2="42" stroke="#C9962B" stroke-width="2.5"/></svg><span>A gilded mirror</span></button>
+          <button class="quiz-opt" data-realm="dark"><svg viewBox="0 0 48 48"><path d="M20 6 26 6 24 30z" fill="#B23A5C"/><rect x="21" y="30" width="6" height="10" fill="#B23A5C"/></svg><span>An obsidian blade</span></button>
+          <button class="quiz-opt" data-realm="cosmic"><svg viewBox="0 0 48 48"><circle cx="24" cy="22" r="11" stroke="#7B5CFA" stroke-width="2.5" fill="none"/><circle cx="24" cy="22" r="3" fill="#3FD9C7"/></svg><span>A starglass orb</span></button>
+          <button class="quiz-opt" data-realm="verdant"><svg viewBox="0 0 48 48"><line x1="24" y1="6" x2="24" y2="42" stroke="#4C9A5B" stroke-width="3"/><circle cx="24" cy="10" r="5" fill="#2FBF9F"/></svg><span>A living vine staff</span></button>
+          <button class="quiz-opt" data-realm="ember"><svg viewBox="0 0 48 48"><rect x="14" y="14" width="20" height="20" rx="6" fill="#E2612B"/><circle cx="24" cy="24" r="4" fill="#F2B705"/></svg><span>A molten gauntlet</span></button>
+        </div>
+      </div>
+
+      <div class="quiz-step" data-step="4">
+        <h2>Which color pulls at you?</h2>
+        <p class="quiz-sub">Trust your first instinct.</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" data-realm="light"><span class="quiz-swatch-opt" style="background:#C9962B"></span><span>Gold light</span></button>
+          <button class="quiz-opt" data-realm="dark"><span class="quiz-swatch-opt" style="background:#B23A5C"></span><span>Plum shadow</span></button>
+          <button class="quiz-opt" data-realm="cosmic"><span class="quiz-swatch-opt" style="background:#7B5CFA"></span><span>Violet cosmos</span></button>
+          <button class="quiz-opt" data-realm="verdant"><span class="quiz-swatch-opt" style="background:#4C9A5B"></span><span>Verdant green</span></button>
+          <button class="quiz-opt" data-realm="ember"><span class="quiz-swatch-opt" style="background:#E2612B"></span><span>Ember orange</span></button>
+        </div>
+      </div>
+
+      <div class="quiz-step" data-step="result">
+        <div class="quiz-result">
+          <div class="result-badge"><svg viewBox="0 0 24 24" width="32" height="32" fill="none"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.6 5.7 21l2.3-7.2-6-4.4h7.6z" fill="white"/></svg></div>
+          <span class="tag" id="resultTag">Your realm</span>
+          <h2 id="resultTitle">Aurelume, the Light Realm</h2>
+          <p id="resultDesc">Warm, radiant, hopeful — your story glows from within.</p>
+          <button class="btn btn-primary" id="enterRealmBtn">Enter the realm</button>
+        </div>
+      </div>
+
+      <button class="quiz-skip" id="quizSkip">Skip the quiz — I'll choose my own realm</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="headbar">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.2 6.8H21l-5.6 4.1L17.6 20 12 15.9 6.4 20l2.2-7.1L3 8.8h6.8z" fill="currentColor"/></svg>
+        Wayfound &amp; Wonder
+      </div>
+      <nav class="mainnav">
+        <a href="#portraits">Portraits</a>
+        <a href="#realms">Realms</a>
+        <a href="#shoes">Shoes</a>
+        <a href="#nails">Nails</a>
+        <a href="#packages">Packages</a>
+      </nav>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <button class="quiz-relaunch" id="musicToggle" type="button" title="Toggle realm music">🔈 Music</button>
+      <div class="realm-toggle" id="realmToggle">
+          <button class="realm-btn" data-realm="light">Light</button>
+          <button class="realm-btn" data-realm="dark">Dark</button>
+          <button class="realm-btn" data-realm="cosmic">Cosmic</button>
+          <button class="realm-btn" data-realm="verdant">Verdant</button>
+          <button class="realm-btn" data-realm="ember">Ember</button>
+        </div>
+        <button class="quiz-relaunch" id="quizRelaunch">Retake quiz</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="hero-eyebrow" id="heroEyebrow">Aurelume — the Light Realm</span>
+        <h1 id="heroHeadline">Wear your story. Frame your legend.</h1>
+        <p class="lead" id="heroLead">Hand-painted fantasy portraits, custom-painted shoes, and press-on nail sets built around the world you'd choose to live in.</p>
+        <div class="hero-ctas">
+          <a href="#portraits" class="btn btn-primary">Commission a portrait</a>
+          <a href="#realms" class="btn btn-ghost">Explore the realms</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <svg data-art="light" class="float" viewBox="0 0 400 400"><circle cx="200" cy="200" r="120" fill="#F1E7CE"/><circle cx="200" cy="150" r="46" fill="#C9962B"/><g stroke="#C9962B" stroke-width="3"><line x1="200" y1="70" x2="200" y2="95"/><line x1="120" y1="150" x2="145" y2="150"/><line x1="255" y1="150" x2="280" y2="150"/><line x1="146" y1="96" x2="163" y2="113"/><line x1="254" y1="96" x2="237" y2="113"/></g><path d="M80 320 Q200 260 320 320" stroke="#8FAFC2" stroke-width="4" fill="none"/></svg>
+        <svg data-art="dark" class="float" viewBox="0 0 400 400"><path d="M240 90a110 110 0 1 0 70 180 86 86 0 0 1-70-180z" fill="#B23A5C"/><circle class="star" cx="90" cy="80" r="2.4" fill="#EFE7F2"/><circle class="star" cx="130" cy="150" r="1.8" fill="#EFE7F2"/><circle class="star" cx="70" cy="220" r="2" fill="#EFE7F2"/><circle class="star" cx="320" cy="300" r="1.6" fill="#EFE7F2"/><path d="M60 340 Q200 300 340 340" stroke="#7C6A93" stroke-width="4" fill="none"/></svg>
+        <svg data-art="cosmic" class="float" viewBox="0 0 400 400"><circle cx="200" cy="200" r="90" fill="#7B5CFA" opacity="0.85"/><circle cx="200" cy="200" r="140" stroke="#3FD9C7" stroke-width="1.5" fill="none" opacity="0.6"/><circle class="star" cx="90" cy="90" r="2.4" fill="#3FD9C7"/><circle class="star" cx="320" cy="110" r="2" fill="#E9E7FB"/><circle class="star" cx="80" cy="300" r="1.8" fill="#3FD9C7"/><circle class="star" cx="330" cy="310" r="2.2" fill="#E9E7FB"/></svg>
+        <svg data-art="verdant" class="float" viewBox="0 0 400 400"><circle cx="200" cy="200" r="120" fill="#16261A"/><path d="M120 300 Q160 220 140 140 Q220 180 200 260 Q260 220 260 140" stroke="#4C9A5B" stroke-width="6" fill="none"/><circle class="star" cx="150" cy="120" r="10" fill="#2FBF9F"/><circle class="star" cx="260" cy="130" r="8" fill="#2FBF9F"/></svg>
+        <svg data-art="ember" class="float" viewBox="0 0 400 400"><circle cx="200" cy="200" r="120" fill="#2A140C"/><path d="M200 100c30 40 50 70 50 110a50 50 0 0 1-100 0c0-40 20-70 50-110z" fill="#E2612B"/><circle class="star" cx="140" cy="300" r="6" fill="#F2B705"/><circle class="star" cx="270" cy="290" r="5" fill="#F2B705"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="portraits">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Available now</span>
+        <h2>Custom fantasy portraits, digital or painted</h2>
+        <p>Every portrait is built around your likeness and the realm you belong to.</p>
+      </div>
+      <div class="gallery" id="portraitGallery"></div>
+      <div class="cta-banner">
+        <div><h3>Ready to see yourself in the realm?</h3><p>Tell us your colors, your size, and your story — we'll sketch the rest.</p></div>
+        <button class="btn btn-primary" id="openCommission">Start your commission</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="realms">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Five realms, one wardrobe</span>
+        <h2>Switch realms any time — nothing here is locked in</h2>
+        <p>Each realm carries its own palette and mood across every product. Tap a realm to preview the whole shop through its eyes.</p>
+      </div>
+      <div class="realm-strip" id="realmStrip">
+        <div class="realm-card" data-realm="light"><div class="realm-swatch"><span class="swatch-dot" style="background:#C9962B"></span><span class="swatch-dot" style="background:#8FAFC2"></span><span class="swatch-dot" style="background:#F1E7CE"></span></div><h3>Aurelume — Light</h3><p>Radiant, warm, hopeful.</p></div>
+        <div class="realm-card" data-realm="dark"><div class="realm-swatch"><span class="swatch-dot" style="background:#B23A5C"></span><span class="swatch-dot" style="background:#8471A0"></span><span class="swatch-dot" style="background:#221A2D"></span></div><h3>Noctivale — Dark</h3><p>Gothic, moody, elegant.</p></div>
+        <div class="realm-card" data-realm="cosmic"><div class="realm-swatch"><span class="swatch-dot" style="background:#7B5CFA"></span><span class="swatch-dot" style="background:#3FD9C7"></span><span class="swatch-dot" style="background:#161240"></span></div><h3>Astrivane — Cosmic</h3><p>Vast, electric, otherworldly.</p></div>
+        <div class="realm-card" data-realm="verdant"><div class="realm-swatch"><span class="swatch-dot" style="background:#4C9A5B"></span><span class="swatch-dot" style="background:#2FBF9F"></span><span class="swatch-dot" style="background:#16261A"></span></div><h3>Sylvaris — Verdant</h3><p>Wild, growing, alive.</p></div>
+        <div class="realm-card" data-realm="ember"><div class="realm-swatch"><span class="swatch-dot" style="background:#E2612B"></span><span class="swatch-dot" style="background:#F2B705"></span><span class="swatch-dot" style="background:#25130B"></span></div><h3>Cinderfall — Ember</h3><p>Molten, fierce, unstoppable.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="shoes">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Opening next</span>
+        <h2>Custom fantasy painted shoes</h2>
+        <p>Hand-painted sneakers themed to your chosen realm — worn armor, not just decoration. Here's a preview of what's coming.</p>
+      </div>
+      <div class="preview-grid" id="shoeGallery"></div>
+      <div class="steps-list">
+        <div class="step-item"><span class="step-num">1</span><p><strong>Choose your realm &amp; pair</strong>Pick a base shoe style and the realm palette you want it painted in.</p></div>
+        <div class="step-item"><span class="step-num">2</span><p><strong>Send your size &amp; reference art</strong>Tell us your shoe size and any characters, symbols, or scenes you want included.</p></div>
+        <div class="step-item"><span class="step-num">3</span><p><strong>We hand-paint and ship</strong>Every pair is painted to order and shipped with care instructions.</p></div>
+      </div>
+      <div class="cta-banner">
+        <div><h3>Be first in line</h3><p>Leave your email and we'll reach out the moment shoes open for orders.</p></div>
+        <form class="notify-form" data-product="shoes"><div class="notify-row"><input type="email" placeholder="you@email.com" required><button type="submit">Notify me</button></div><span class="notify-confirm">You're on the list ✦</span></form>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="nails">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Opening next</span>
+        <h2>Fantasy press-on nails</h2>
+        <p>Realm-matched nail sets, sized to you, designed to pair with your portrait or shoes.</p>
+      </div>
+      <div class="preview-grid" id="nailGallery"></div>
+      <div class="steps-list">
+        <div class="step-item"><span class="step-num">1</span><p><strong>Pick your set</strong>Choose a realm-themed design or request a fully custom set.</p></div>
+        <div class="step-item"><span class="step-num">2</span><p><strong>Share your sizing</strong>A quick sizing guide will help you get a snug, reusable fit.</p></div>
+        <div class="step-item"><span class="step-num">3</span><p><strong>Wear the realm</strong>Sets ship ready to apply, with extra adhesive tabs included.</p></div>
+      </div>
+      <div class="cta-banner">
+        <div><h3>Be first in line</h3><p>Leave your email and we'll reach out the moment nails open for orders.</p></div>
+        <form class="notify-form" data-product="nails"><div class="notify-row"><input type="email" placeholder="you@email.com" required><button type="submit">Notify me</button></div><span class="notify-confirm">You're on the list ✦</span></form>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="packages">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">The full experience</span>
+        <h2>Full realm packages</h2>
+        <p>A redesigned book cover, matching shoes, bookmarks, and press-on nails — one complete set built around a single story.</p>
+      </div>
+      <div class="package-teaser">
+        <div>
+          <h3 style="font-size:1.3rem;">The Realm Edition book set</h3>
+          <p>One story, fully dressed in its realm — built for readers who want to hold the whole world in their hands.</p>
+          <ul class="package-list">
+            <li>Redesigned dust jacket &amp; endpapers matched to your realm</li>
+            <li>Painted shoes carrying the book's motifs</li>
+            <li>A set of themed bookmarks</li>
+            <li>Press-on nails matched to the cover palette</li>
+          </ul>
+        </div>
+        <svg viewBox="0 0 300 300"><rect x="70" y="40" width="90" height="130" rx="4" fill="var(--accent2)" opacity="0.5"/><rect x="100" y="55" width="90" height="130" rx="4" fill="var(--accent)"/><circle class="star" cx="230" cy="60" r="2" fill="var(--accent2)"/><circle class="star" cx="60" cy="200" r="2" fill="var(--accent2)"/></svg>
+      </div>
+      <div class="cta-banner">
+        <div><h3>Be first to reserve a package</h3><p>Packages open last, in limited runs per realm. Get on the list.</p></div>
+        <form class="notify-form" data-product="packages"><div class="notify-row"><input type="email" placeholder="you@email.com" required><button type="submit">Notify me</button></div><span class="notify-confirm">You're on the list ✦</span></form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <div><div class="brand">Wayfound &amp; Wonder</div><p>Custom fantasy portraits, painted shoes, and press-on nails — made realm by realm.</p></div>
+      <div class="foot-links"><a href="#portraits">Portraits</a><a href="#realms">Realms</a><a href="#shoes">Shoes</a><a href="#nails">Nails</a><a href="#packages">Packages</a></div>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="commissionModal">
+    <div class="modal-card">
+      <div id="commissionForm">
+        <div class="modal-head"><h2 style="font-size:1.35rem;">Start your commission</h2><button class="modal-close" id="closeCommission">&times;</button></div>
+        <p style="margin-bottom:22px;">A few quick questions so we can start sketching in your realm's palette.</p>
+        <div class="field-group"><span class="field-label">Which realm is this for?</span>
+          <div class="pill-row" id="modalRealmPick">
+            <button type="button" class="pill" data-val="light">Light</button>
+            <button type="button" class="pill" data-val="dark">Dark</button>
+            <button type="button" class="pill" data-val="cosmic">Cosmic</button>
+            <button type="button" class="pill" data-val="verdant">Verdant</button>
+            <button type="button" class="pill" data-val="ember">Ember</button>
+          </div>
+        </div>
+        <div class="field-group"><span class="field-label">Color preference</span>
+          <div class="swatch-row" id="modalSwatches">
+            <button type="button" class="swatch-pick" style="background:#C9962B" data-val="gold"></button>
+            <button type="button" class="swatch-pick" style="background:#8FAFC2" data-val="sky"></button>
+            <button type="button" class="swatch-pick" style="background:#B23A5C" data-val="plum"></button>
+            <button type="button" class="swatch-pick" style="background:#7B5CFA" data-val="violet"></button>
+            <button type="button" class="swatch-pick" style="background:#3FD9C7" data-val="cyan"></button>
+            <button type="button" class="swatch-pick" style="background:#4C9A5B" data-val="green"></button>
+            <button type="button" class="swatch-pick" style="background:#E2612B" data-val="ember"></button>
+            <button type="button" class="swatch-pick" style="background:#221A2D" data-val="onyx"></button>
+          </div>
+        </div>
+        <div class="field-group"><span class="field-label">Size</span>
+          <div class="pill-row" id="modalSize">
+            <button type="button" class="pill" data-val="8x10">8×10 print</button>
+            <button type="button" class="pill" data-val="11x14">11×14 print</button>
+            <button type="button" class="pill" data-val="16x20">16×20 print</button>
+            <button type="button" class="pill" data-val="digital">Digital only</button>
+          </div>
+        </div>
+        <div class="field-group"><span class="field-label">Style</span>
+          <div class="pill-row" id="modalStyle">
+            <button type="button" class="pill" data-val="painterly">Painterly</button>
+            <button type="button" class="pill" data-val="realism">Detailed realism</button>
+            <button type="button" class="pill" data-val="stylized">Stylized illustration</button>
+          </div>
+        </div>
+        <div class="field-group"><span class="field-label">Anything else we should know?</span>
+          <textarea class="field-input" id="modalNotes" placeholder="Reference photos, pose ideas, companions to include..."></textarea>
+        </div>
+        <button class="btn btn-primary modal-submit" id="submitCommission">Send my request</button>
+        <p class="form-note" id="commissionFormNote"></p>
+      </div>
+      <div class="modal-confirm" id="commissionConfirm">
+        <div class="result-badge"><svg viewBox="0 0 24 24" width="28" height="28" fill="none"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2 style="font-size:1.25rem; margin-bottom:10px;">Request received</h2>
+        <p style="margin:0 auto 20px; max-width:38ch;">We've got your realm, palette, and size. Expect a first sketch in your inbox soon.</p>
+        <button class="btn btn-ghost" id="closeConfirm">Close</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const body = document.body;
+
+  /* =====================================================================
+     FORM BACKEND CONFIG
+     Paste your Formspree (or similar) endpoint URLs below to make the
+     notify-me and commission forms actually send somewhere. Until you do,
+     both forms run in "demo mode": they show a confirmation locally but
+     don't send data anywhere.
+     Example once you have a Formspree form: "https://formspree.io/f/abcd1234"
+  ===================================================================== */
+  const FORM_ENDPOINTS = {
+    notify: "",       // <-- paste your "notify me" form endpoint here
+    commission: ""    // <-- paste your commission-request form endpoint here
+  };
+
+  const REALM_META = {
+    light:{ label:"Aurelume", full:"Aurelume, the Light Realm", desc:"Warm, radiant, hopeful — your story glows from within.",
+      eyebrow:"Aurelume — the Light Realm", headline:"Wear your story. Frame your legend.",
+      lead:"Hand-painted fantasy portraits, custom-painted shoes, and press-on nail sets built around the world you'd choose to live in." },
+    dark:{ label:"Noctivale", full:"Noctivale, the Dark Realm", desc:"Gothic, moody, elegant — your story lives in the shadows on purpose.",
+      eyebrow:"Noctivale — the Dark Realm", headline:"Wear the shadow. Own the legend.",
+      lead:"Gothic portraits, obsidian-toned shoes, and moonlit nail sets built for stories that belong after dark." },
+    cosmic:{ label:"Astrivane", full:"Astrivane, the Cosmic Realm", desc:"Vast, electric, otherworldly — your story reaches past the stars.",
+      eyebrow:"Astrivane — the Cosmic Realm", headline:"Wear the nebula. Carry the legend.",
+      lead:"Nebula-toned portraits, comet-streaked shoes, and starlight nail sets for stories too big for one world." },
+    verdant:{ label:"Sylvaris", full:"Sylvaris, the Verdant Realm", desc:"Wild, growing, alive — your story roots deep and reaches further.",
+      eyebrow:"Sylvaris — the Verdant Realm", headline:"Wear the wild. Grow the legend.",
+      lead:"Nature-woven portraits, moss and vine-painted shoes, and verdant nail sets for stories that breathe." },
+    ember:{ label:"Cinderfall", full:"Cinderfall, the Ember Realm", desc:"Molten, fierce, unstoppable — your story burns rather than fades.",
+      eyebrow:"Cinderfall — the Ember Realm", headline:"Wear the fire. Forge the legend.",
+      lead:"Molten-toned portraits, ember-painted shoes, and fire-kissed nail sets for stories that refuse to burn out." }
+  };
+  const ACCENT = {light:"#C9962B", dark:"#B23A5C", cosmic:"#7B5CFA", verdant:"#4C9A5B", ember:"#E2612B"};
+  const BG2    = {light:"#F1E7CE", dark:"#1F1727", cosmic:"#120E33", verdant:"#16261A", ember:"#2A140C"};
+  const REALMS = ['light','dark','cosmic','verdant','ember'];
+
+  /* =====================================================================
+     PRODUCTS & MUSIC
+     This site loads its real products and realm music from a file called
+     "site-data.json" that lives next to this index.html file. Use
+     admin.html (included alongside this file) to build/edit that JSON —
+     you never need to touch this code to update products or music.
+     If site-data.json isn't found yet (e.g. you haven't run admin.html
+     and exported it), the site falls back to placeholder demo content
+     below so the page still works.
+  ===================================================================== */
+  const DEFAULT_DATA = {
+    portraits: {
+      light:[{title:"The Radiant Vow", price:"From $180", size:"", description:"A one-of-one commission, painted digitally or by hand.", image:""}],
+      dark:[{title:"The Hollow Crown", price:"From $180", size:"", description:"A one-of-one commission, painted digitally or by hand.", image:""}],
+      cosmic:[{title:"Nebula-Born", price:"From $180", size:"", description:"A one-of-one commission, painted digitally or by hand.", image:""}],
+      verdant:[{title:"The Rootbound Oath", price:"From $180", size:"", description:"A one-of-one commission, painted digitally or by hand.", image:""}],
+      ember:[{title:"The Molten Vow", price:"From $180", size:"", description:"A one-of-one commission, painted digitally or by hand.", image:""}]
+    },
+    shoes: {
+      light:[{title:"The Wanderer's Pair", price:"", size:"", description:"Realm-matched, made to order.", image:""}],
+      dark:[], cosmic:[], verdant:[], ember:[]
+    },
+    nails: {
+      light:[{title:"The Realmwalker Set", price:"", size:"", description:"Realm-matched, made to order.", image:""}],
+      dark:[], cosmic:[], verdant:[], ember:[]
+    },
+    music: { light:"", dark:"", cosmic:"", verdant:"", ember:"" }
+  };
+  let SITE_DATA = DEFAULT_DATA;
+  let musicOn = false;
+  const audioEls = {};
+  REALMS.forEach(r=>{
+    const a = document.createElement('audio'); a.loop = true; a.id = 'audio-'+r;
+    document.body.appendChild(a); audioEls[r] = a;
+  });
+
+  function applyMusic(realm){
+    REALMS.forEach(r=>{ if(r!==realm) audioEls[r].pause(); });
+    const track = SITE_DATA.music && SITE_DATA.music[realm];
+    const a = audioEls[realm];
+    if(track && a.getAttribute('src') !== track) a.src = track;
+    if(musicOn && track) a.play().catch(()=>{});
+  }
+  const musicBtn = document.getElementById('musicToggle');
+  musicBtn.addEventListener('click', ()=>{
+    musicOn = !musicOn;
+    musicBtn.textContent = musicOn ? '🔊 Music' : '🔈 Music';
+    if(musicOn) applyMusic(body.getAttribute('data-realm')); else REALMS.forEach(r=>audioEls[r].pause());
+  });
+
+  function setRealm(realm){
+    body.setAttribute('data-realm', realm);
+    document.querySelectorAll('.realm-btn').forEach(b=>b.classList.toggle('active', b.dataset.realm===realm));
+    document.querySelectorAll('.realm-card').forEach(c=>c.classList.toggle('current', c.dataset.realm===realm));
+    document.querySelectorAll('.hero-art svg').forEach(svg=> svg.style.display = (svg.dataset.art===realm ? 'block' : 'none'));
+    const m = REALM_META[realm];
+    document.getElementById('heroEyebrow').textContent = m.eyebrow;
+    document.getElementById('heroHeadline').textContent = m.headline;
+    document.getElementById('heroLead').textContent = m.lead;
+    renderGallery(realm);
+    renderPreview('shoeGallery', SITE_DATA.shoes[realm] || [], realm, 'shoe');
+    renderPreview('nailGallery', SITE_DATA.nails[realm] || [], realm, 'nail');
+    applyMusic(realm);
+  }
+
+  document.getElementById('realmToggle').addEventListener('click', e=>{
+    const btn = e.target.closest('.realm-btn'); if(btn) setRealm(btn.dataset.realm);
+  });
+  document.querySelectorAll('.realm-card').forEach(card=> card.addEventListener('click', ()=> setRealm(card.dataset.realm)));
+
+  function placeholderSVG(realm){
+    return `<svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="375" fill="${BG2[realm]}"/>
+          <circle cx="${80+Math.random()*140}" cy="${90+Math.random()*80}" r="${60+Math.random()*40}" fill="${ACCENT[realm]}" opacity="0.55"/>
+          <circle cx="${60+Math.random()*180}" cy="${220+Math.random()*100}" r="${40+Math.random()*40}" fill="${ACCENT[realm]}" opacity="0.3"/>
+        </svg>`;
+  }
+  function renderGallery(realm){
+    const g = document.getElementById('portraitGallery'); g.innerHTML = '';
+    const items = (SITE_DATA.portraits && SITE_DATA.portraits[realm]) || [];
+    items.forEach(item=>{
+      const card = document.createElement('div'); card.className = 'portrait-card';
+      const art = item.image ? `<img src="${item.image}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;">` : placeholderSVG(realm);
+      const meta = [item.size, item.description].filter(Boolean).join(' — ');
+      card.innerHTML = `
+        <div class="portrait-frame">${art}</div>
+        <div class="portrait-info"><h3>${item.title}</h3><p>${meta || 'A one-of-one commission, painted digitally or by hand.'}</p>${item.price ? `<span class="price">${item.price}</span>` : ''}</div>`;
+      g.appendChild(card);
+    });
+  }
+
+  function shoeSVG(realm){
+    return `<svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice">
+      <rect width="300" height="375" fill="${BG2[realm]}"/>
+      <path d="M60 250 Q65 195 125 188 L205 168 Q245 162 255 200 L258 232 Q200 248 148 252 Q100 256 60 250Z" fill="${ACCENT[realm]}" opacity="0.8"/>
+      <rect x="55" y="246" width="205" height="16" rx="8" fill="${ACCENT[realm]}" opacity="0.35"/>
+    </svg>`;
+  }
+  function nailSVG(realm){
+    let shapes = '';
+    for(let i=0;i<5;i++){
+      const x = 45 + i*45; const h = 90 + (i%2===0 ? 20 : 0);
+      shapes += `<rect x="${x}" y="${230-h}" width="30" height="${h}" rx="15" fill="${ACCENT[realm]}" opacity="${0.5 + i*0.08}"/>`;
+    }
+    return `<svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice"><rect width="300" height="375" fill="${BG2[realm]}"/>${shapes}</svg>`;
+  }
+
+  function renderPreview(containerId, items, realm, kind){
+    const g = document.getElementById(containerId); g.innerHTML = '';
+    items.forEach(item=>{
+      const card = document.createElement('div'); card.className = 'preview-card';
+      const art = item.image ? `<img src="${item.image}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;">` : (kind === 'shoe' ? shoeSVG(realm) : nailSVG(realm));
+      const meta = [item.size, item.description].filter(Boolean).join(' — ');
+      card.innerHTML = `
+        ${item.image ? '' : '<span class="ribbon">Coming soon</span>'}
+        <div class="preview-art">${art}</div>
+        <div class="preview-info"><h3>${item.title}</h3><p>${meta || 'Realm-matched, made to order.'}</p>${item.price ? `<span class="price">${item.price}</span>` : ''}</div>`;
+      g.appendChild(card);
+    });
+  }
+
+  /* ---------- Quiz logic ---------- */
+  const overlay = document.getElementById('quizOverlay');
+  const steps = ['1','2','3','4','result'];
+  let stepIndex = 0;
+  const scores = {light:0, dark:0, cosmic:0, verdant:0, ember:0};
+
+  function renderProgress(){
+    const p = document.getElementById('quizProgress'); p.innerHTML = '';
+    for(let i=0;i<4;i++){ const s = document.createElement('span'); if(i < stepIndex) s.classList.add('done'); p.appendChild(s); }
+  }
+  function showStep(i){
+    document.querySelectorAll('.quiz-step').forEach(el=>el.classList.remove('active'));
+    document.querySelector(`.quiz-step[data-step="${steps[i]}"]`).classList.add('active');
+    renderProgress();
+  }
+  document.querySelectorAll('.quiz-step[data-step]').forEach(stepEl=>{
+    stepEl.querySelectorAll('.quiz-opt').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        scores[opt.dataset.realm]++;
+        stepIndex++;
+        if(stepIndex < 4){ showStep(stepIndex); }
+        else{
+          const winner = Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+          const m = REALM_META[winner];
+          document.getElementById('resultTag').textContent = m.label;
+          document.getElementById('resultTitle').textContent = m.full;
+          document.getElementById('resultDesc').textContent = m.desc;
+          document.getElementById('enterRealmBtn').dataset.realm = winner;
+          stepIndex = 4; showStep(4);
+        }
+      });
+    });
+  });
+  document.getElementById('enterRealmBtn').addEventListener('click', ()=>{
+    setRealm(document.getElementById('enterRealmBtn').dataset.realm);
+    overlay.classList.add('hidden');
+  });
+  document.getElementById('quizSkip').addEventListener('click', ()=> overlay.classList.add('hidden'));
+  document.getElementById('quizRelaunch').addEventListener('click', ()=>{
+    stepIndex = 0; Object.keys(scores).forEach(k=>scores[k]=0);
+    showStep(0); overlay.classList.remove('hidden');
+  });
+
+  /* ---------- Notify forms (Formspree-ready) ---------- */
+  async function handleNotify(e, form){
+    e.preventDefault();
+    const email = form.querySelector('input[type=email]').value;
+    const product = form.dataset.product || 'general';
+    const showConfirm = ()=>{ form.querySelector('.notify-row').style.display='none'; form.querySelector('.notify-confirm').style.display='block'; };
+    if(!FORM_ENDPOINTS.notify){ showConfirm(); return; }
+    try{
+      const res = await fetch(FORM_ENDPOINTS.notify, {
+        method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify({ email, interested_in: product })
+      });
+      if(res.ok){ showConfirm(); } else { alert('Something went wrong sending that — please try again in a moment.'); }
+    }catch(err){ alert('Something went wrong sending that — please try again in a moment.'); }
+  }
+  document.querySelectorAll('.notify-form').forEach(form=> form.addEventListener('submit', e=>handleNotify(e, form)));
+
+  /* ---------- Commission modal ---------- */
+  const modal = document.getElementById('commissionModal');
+  const commissionState = { realm:null, color:null, size:null, style:null };
+
+  function openModal(){
+    modal.classList.add('open');
+    const currentRealm = body.getAttribute('data-realm');
+    commissionState.realm = currentRealm;
+    document.querySelectorAll('#modalRealmPick .pill').forEach(p=>p.classList.toggle('selected', p.dataset.val===currentRealm));
+    document.getElementById('commissionFormNote').textContent = FORM_ENDPOINTS.commission ? '' : "Demo mode — connect a form endpoint to receive these requests by email.";
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    document.getElementById('commissionForm').style.display = 'block';
+    document.getElementById('commissionConfirm').style.display = 'none';
+  }
+  document.getElementById('openCommission').addEventListener('click', openModal);
+  document.getElementById('closeCommission').addEventListener('click', closeModal);
+  document.getElementById('closeConfirm').addEventListener('click', closeModal);
+  modal.addEventListener('click', e=>{ if(e.target === modal) closeModal(); });
+
+  function wirePillGroup(id, stateKey){
+    document.getElementById(id).addEventListener('click', e=>{
+      const pill = e.target.closest('.pill'); if(!pill) return;
+      pill.parentElement.querySelectorAll('.pill').forEach(p=>p.classList.remove('selected'));
+      pill.classList.add('selected');
+      commissionState[stateKey] = pill.dataset.val;
+    });
+  }
+  wirePillGroup('modalRealmPick', 'realm');
+  wirePillGroup('modalSize', 'size');
+  wirePillGroup('modalStyle', 'style');
+  document.getElementById('modalSwatches').addEventListener('click', e=>{
+    const sw = e.target.closest('.swatch-pick'); if(!sw) return;
+    sw.parentElement.querySelectorAll('.swatch-pick').forEach(s=>s.classList.remove('selected'));
+    sw.classList.add('selected');
+    commissionState.color = sw.dataset.val;
+  });
+
+  document.getElementById('submitCommission').addEventListener('click', async ()=>{
+    const notes = document.getElementById('modalNotes').value;
+    const showConfirm = ()=>{ document.getElementById('commissionForm').style.display = 'none'; document.getElementById('commissionConfirm').style.display = 'block'; };
+    if(!FORM_ENDPOINTS.commission){ showConfirm(); return; }
+    try{
+      const res = await fetch(FORM_ENDPOINTS.commission, {
+        method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify({ ...commissionState, notes })
+      });
+      if(res.ok){ showConfirm(); } else { alert('Something went wrong sending that — please try again in a moment.'); }
+    }catch(err){ alert('Something went wrong sending that — please try again in a moment.'); }
+  });
+
+  /* ---------- init ---------- */
+  fetch('site-data.json', {cache:'no-store'})
+    .then(res => res.ok ? res.json() : Promise.reject())
+    .then(data => { SITE_DATA = data; setRealm(body.getAttribute('data-realm') || 'light'); })
+    .catch(() => { SITE_DATA = DEFAULT_DATA; setRealm('light'); });
+  showStep(0);
+})();
+</script>
+</body>
+</html>

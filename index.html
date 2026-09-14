@@ -43,7 +43,29 @@
     --accent:#E2612B; --accent-ink:#1B0E09; --accent2:#F2B705; --card:#25130B;
     --line: rgba(245,230,220,0.10); --shadow: 0 18px 40px rgba(40,10,0,0.5);
   }
+  /* All dark realms: make text white */
+[data-realm="dark"],
+[data-realm="cosmic"],
+[data-realm="verdant"],
+[data-realm="ember"] {
+  color: #FFFFFF;
+  }
 
+/* Override paragraph soft text color for dark realms */
+[data-realm="dark"] p,
+[data-realm="cosmic"] p,
+[data-realm="verdant"] p,
+[data-realm="ember"] p {
+  color: #FFFFFF;
+  }
+
+/* Keep light realm with its original dark text */
+[data-realm="light"] {
+  color: var(--ink);
+  }
+[data-realm="light"] p {
+  color: var(--ink-soft);
+  }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
